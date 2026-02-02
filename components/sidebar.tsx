@@ -1,6 +1,6 @@
 "use client"
 
-import { LayoutDashboard , Package, TextAlignStart, Boxes , Package2 , ShoppingCart ,HandCoins , ShoppingBasket , DollarSign, NotepadText, CreditCard, BookText, Mail, X } from 'lucide-react'
+import { LayoutDashboard , Package, TextAlignStart, Boxes , Package2 , ShoppingCart ,HandCoins , ShoppingBasket , DollarSign, NotepadText, CreditCard, BookText, Mail, X, ChevronLeft, ChevronRight } from 'lucide-react'
 import React from 'react'
 import Link from "next/link"
 import type { userType } from '@/types'
@@ -10,16 +10,19 @@ import { Power } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useRef, useEffect , useState } from 'react'
 
-import { navItems } from '@/variables'
+import { navItems } from '@/variables_functions'
 
 
 
 
-export default function Sidebar({collapsed , user, onClose} : {collapsed : boolean , user : userType, onClose?: () => void}) {
+export default function Sidebar({user} : {user : userType}) {
   const {name , role} = user;
   const path = usePathname();
   const sideBarRef = useRef<HTMLDivElement>(null);
-  const [sideBarW , setSideBarW] = useState(0);  
+  const [sideBarW , setSideBarW] = useState(0);
+  const [collapsed, setCollapsed] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
+  
   useEffect(()=>{
     const updateW = ()=>{
       if(!sideBarRef.current) return;
@@ -28,29 +31,14 @@ export default function Sidebar({collapsed , user, onClose} : {collapsed : boole
     updateW();
     window.addEventListener('resize', updateW);
     return () => window.removeEventListener('resize', updateW);
-  },[])
+  },[collapsed])
 
-  // all the paths here are temporary and must be changed later
+  const handleToggle = () => {
+    setCollapsed(!collapsed);
+  };
 
-  
-
-  const sidebarVariants = {
-    expanded: {
-      width: 'auto',
-      transition: {
-        type: 'spring',
-        stiffness: 300,
-        damping: 30
-      }
-    },
-    collapsed: {
-      width: '80px',
-      transition: {
-        type: 'spring',
-        stiffness: 300,
-        damping: 30
-      }
-    }
+  const handleMobileClose = () => {
+    setMobileOpen(false);
   };
 
   const contentVariants = {
@@ -82,21 +70,20 @@ export default function Sidebar({collapsed , user, onClose} : {collapsed : boole
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
             className="fixed inset-0 bg-[rgba(0,0,0,0.6)] z-40 lg:hidden"
-            onClick={onClose}
+            onClick={handleMobileClose}
           />
           )}
         </AnimatePresence>
-        <motion.aside 
-          variants={sidebarVariants}
-          animate={collapsed ? 'collapsed' : 'expanded'}
-          className={`sticky w-max left-0 top-0 h-screen bg-[#32A4AF] pt-[10px] overflow-y-auto flex flex-col z-50 
-          ${collapsed ? 'hidden lg:flex' : 'w-[280px] sm:w-[300px]'}`}
+        <aside 
+          className={`sticky left-0 top-0 h-screen bg-[#32A4AF] pt-[10px] overflow-y-auto flex flex-col z-50 transition-all duration-300 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] ${
+            collapsed ? 'w-[80px]' : 'w-[300px]'
+          }`}
           ref = {sideBarRef}
         >
         {/* Mobile close button */}
         {!collapsed && (
           <button
-            onClick={onClose}
+            onClick={handleMobileClose}
             className="lg:hidden absolute top-4 right-4 text-white hover:bg-[#3FBCC8] p-2 rounded-lg transition-colors"
           >
           <X size={24} />
@@ -177,7 +164,7 @@ export default function Sidebar({collapsed , user, onClose} : {collapsed : boole
                         : 'text-white hover:bg-[#3FBCC8]'
                       }`}
                       title={collapsed ? item.name : ''}
-                      onClick={onClose}
+                      onClick={handleMobileClose}
                   >
                   <item.icon size={collapsed ? 24 : 20} />
                   {!collapsed && item.name}
@@ -188,20 +175,21 @@ export default function Sidebar({collapsed , user, onClose} : {collapsed : boole
                   key={`${item.name}-${ind}`} 
                   navProp={item} 
                   collapsed={collapsed}
-                  onLinkClick={onClose}
+                  onLinkClick={handleMobileClose}
                 />
               )
             })}
           </ul>
         </nav>
             
-        {/*Logout*/}    
-        <div className='w-full flex items-end justify-center mt-auto mb-[20px]'>
+        {/*Logout and Toggle*/}    
+        <div className='w-full flex flex-col items-center justify-center gap-3 mt-auto mb-[20px] px-[7.5%]'>
+          {/* Logout Button */}
           {collapsed ? (
             <motion.button 
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className='w-12 h-12 bg-[#FF0000] flex items-center justify-center text-white font-bold rounded-xl hover:bg-[#CC0000] transition-all duration-300'
+              className='w-12 h-12 cursor-pointer bg-[#FF0000] flex items-center justify-center text-white font-bold rounded-xl hover:bg-[#CC0000] transition-all duration-300'
               title='Log Out'
             >
               <Power strokeWidth={3} size={24}/> 
@@ -210,14 +198,32 @@ export default function Sidebar({collapsed , user, onClose} : {collapsed : boole
             <motion.button 
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
-              className='w-[85%] bg-[#FF0000] flex items-center justify-center px-[15px] py-[10px] text-white font-bold rounded-xl gap-2 text-lg sm:text-xl hover:bg-[#CC0000] transition-all duration-300 cursor-pointer'
+              className='w-full bg-[#FF0000] flex items-center justify-center px-[15px] py-[10px] text-white font-bold rounded-xl gap-2 text-lg sm:text-xl hover:bg-[#CC0000] transition-all duration-300 cursor-pointer'
             >
               <Power strokeWidth={3} className='flex items-center'/> 
               <h2 className='flex items-end'>Log Out</h2>
             </motion.button>
           )}
+
+          {/* Toggle Button */}
+          <button
+            onClick={handleToggle}
+            className={`flex cursor-pointer items-center justify-center bg-[#1E88A8] text-white font-bold rounded-xl hover:bg-[#176B85] transition-all duration-300 ${
+              collapsed ? 'w-12 h-12' : 'w-full px-[15px] py-[10px] gap-2'
+            }`}
+            title={collapsed ? 'Expand' : 'Collapse'}
+          >
+            {collapsed ? (
+              <ChevronRight strokeWidth={3} size={24} />
+            ) : (
+              <>
+                <ChevronLeft strokeWidth={3} size={20} />
+                <span className='text-lg sm:text-xl'>Collapse</span>
+              </>
+            )}
+          </button>
         </div>
-      </motion.aside>
+      </aside>
     </>
   )
 }

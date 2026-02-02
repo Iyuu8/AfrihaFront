@@ -3,7 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Poppins } from 'next/font/google'
 import Sidebar from "@/components/sidebar";
-import {user} from "../variables"
+import {user} from "../variables_functions"
 import Header from "@/components/header";
 
 const poppins = Poppins({
@@ -37,8 +37,8 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased flex`}
       >
-        <Sidebar collapsed={true} user = {user}/>
-        <div className="flex flex-col">
+        <Sidebar collapsed={false} user = {user}/>
+        <div className="flex flex-col w-full bg-[#E3EDF9]">
           <Header />
 
         </div>
