@@ -6,6 +6,7 @@ import Link from 'next/link'
 import LoginFeatureContainer from '@/components/loginFeatureContainer'
 import { FiShoppingCart } from "react-icons/fi";
 import { FaExclamationCircle } from 'react-icons/fa'
+import { BarChart3 } from 'lucide-react'
 
 
 export default function Login() {
@@ -123,7 +124,7 @@ export default function Login() {
                 <LoginFeatureContainer
                     title = 'Real-time Tracking'
                     description='Monitor stock levels instantly'
-                    Icon = {FiShoppingCart}
+                    Icon = {BarChart3}
                 />
             </div>
         </div>
