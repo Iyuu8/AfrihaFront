@@ -48,3 +48,10 @@ export interface SupplierType{
     products : ProductType[]
 }
 
+// the type of carousel items
+export interface TypeCarouselItem {
+  title: string;
+  nb: number;
+  Icon: LucideIcon;
+  path: string;
+};

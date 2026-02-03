@@ -42,9 +42,12 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased flex`}
       >
         <Sidebar className="hidden lg:flex" user={user} />
-        <div className="flex flex-col w-full bg-[#E3EDF9]">
+        <div className="flex flex-col bg-[#E3EDF9] flex-1 overflow-hidden">
           <Header />
-          {children}
+          <main className="flex flex-col px-[clamp(15px,5%,80px)]">
+            {children}
+
+          </main>
         </div>
       </body>
     </html>

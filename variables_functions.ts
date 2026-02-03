@@ -1,28 +1,43 @@
 // for the icons bellow
-import { LayoutDashboard , Package, TextAlignStart, Boxes , Package2 , ShoppingCart ,HandCoins , ShoppingBasket , DollarSign, NotepadText, CreditCard, BookText, Mail, X } from 'lucide-react'
-import type { ProductType, SupplierType , OrderType } from './types';
+import { LayoutDashboard , Package, TextAlignStart, Boxes , Package2 , ShoppingCart ,HandCoins , ShoppingBasket , DollarSign, NotepadText, CreditCard, BookText, Mail, X, Users , Tags, Truck, ShoppingBag, ArrowLeftRight} from 'lucide-react'
+import type { ProductType, SupplierType , OrderType, TypeCarouselItem } from './types';
 
 // for the side bar
 export const user = {name:"ayoub" , role:"admin"};
 export const navItems = [
-{name: "Dashboard",path: "/dashboard" , icon : LayoutDashboard , children:[]},
-{name: "Products",path: "/products" , icon : Package , children:[
-    {name: "Categories",path: "/products/categories" , icon : TextAlignStart},
-    {name: "Variant",path: "/products/variant" , icon : Package2},
-    {name: "Batch",path: "/products/batch" , icon : Boxes}
-]},
-{name: "Orders",path: "/orders" , icon : ShoppingCart , children:[
-    {name: "Sales",path: "/orders/sales" , icon : HandCoins},
-    {name: "Purchase",path: "/orders/purchase" , icon :ShoppingBasket },
-]},
-{name: "Payment",path: "/payment" , icon : DollarSign , children:[
-    {name: "Invoice",path: "/payment/invoice" , icon : NotepadText},
-    {name: "pay",path: "/payment/pay" , icon :CreditCard },
-]},
-{name: "Stock Movement",path: "/stock_movement" , icon : BookText , children:[]},
-{name: "Messages",path: "/messages" , icon :  Mail, children:[]},
-
-]
+  { name: "Dashboard", path: "/dashboard", icon: LayoutDashboard, children: [] },
+  {
+    name: "Products",
+    path: "/products",
+    icon: Package,
+    children: [
+      { name: "Categories", path: "/products/categories", icon: TextAlignStart },
+      { name: "Variant", path: "/products/variant", icon: Package2 },
+      { name: "Batch", path: "/products/batch", icon: Boxes },
+    ],
+  },
+  {
+    name: "Orders",
+    path: "/orders",
+    icon: ShoppingCart,
+    children: [
+      { name: "Sales", path: "/orders/sales", icon: HandCoins },
+      { name: "Purchase", path: "/orders/purchase", icon: ShoppingBasket },
+    ],
+  },
+  { name: "Suppliers", path: "/suppliers", icon: Users, children: [] },
+  {
+    name: "Payment",
+    path: "/payment",
+    icon: DollarSign,
+    children: [
+      { name: "Invoice", path: "/payment/invoice", icon: NotepadText },
+      { name: "Pay", path: "/payment/pay", icon: CreditCard },
+    ],
+  },
+  { name: "Stock Movement", path: "/stock_movement", icon: BookText, children: [] },
+  { name: "Messages", path: "/messages", icon: Mail, children: [] }
+];
 
 // search functions , 
 
@@ -215,3 +230,44 @@ export const searchOrders = async (query: string): Promise<OrderType[]> => {
 
   return orders;
 };
+
+
+// for the Dashboard's carousel
+export const carouselData: TypeCarouselItem[] = [
+  {
+    title: "Total Products",
+    nb: 1,
+    Icon: Package,
+    path: "/products"
+  },
+  {
+    title: "Categories",
+    nb: 9,
+    Icon: Tags,
+    path: "/products/categories"
+  },
+  {
+    title: "Suppliers",
+    nb: 4,
+    Icon: Truck,
+    path: "/suppliers"
+  },
+  {
+    title: "Purchase Orders",
+    nb: 0,
+    Icon: ShoppingCart,
+    path: "/orders/purchase"
+  },
+  {
+    title: "Sales Orders",
+    nb: 0,
+    Icon: ShoppingBag,
+    path: "/orders/sales"
+  },
+  {
+    title: "Revenue",
+    nb: 24500,
+    Icon: ArrowLeftRight,
+    path: "/stock_movement"
+  }
+];
