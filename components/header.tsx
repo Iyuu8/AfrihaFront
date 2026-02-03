@@ -19,7 +19,7 @@ export default function Header() {
         onToggle={() => setIsSidebarOpen(!isSidebarOpen)}
       />
 
-      <header className='flex h-[15vh] items-center px-[6%] sm:gap-[8%] gap-3'>
+      <header className='flex h-[15vh] items-center px-[6%] sm:gap-[8%] gap-3 py-[10px]'>
         {/* Mobile menu button */}
         <button 
           onClick={() => setIsSidebarOpen(!isSidebarOpen)}

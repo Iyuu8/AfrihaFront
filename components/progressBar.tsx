@@ -6,7 +6,7 @@ export default function ProgressBar({ progress }: {progress : number}) {
   const status = getStatus(progress)
 
   return (
-    <div className="grow-1 flex px-[15px] items-center flex-col justify-center">
+    <div className="grow-1 flex px-[5px] lg:px-[15px] items-center flex-col justify-center">
       <p className="text-center text-gray-600 font-medium mb-2 font-bold">
         {status}
       </p>
