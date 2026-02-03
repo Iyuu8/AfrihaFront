@@ -1,11 +1,11 @@
 // for the icons bellow
-import { LayoutDashboard , Package, TextAlignStart, Boxes , Package2 , ShoppingCart ,HandCoins , ShoppingBasket , DollarSign, NotepadText, CreditCard, BookText, Mail, X, Users , Tags, Truck, ShoppingBag, ArrowLeftRight} from 'lucide-react'
-import type { ProductType, SupplierType , OrderType, TypeCarouselItem } from './types';
+import { LayoutDashboard , Package, TextAlignStart, Boxes , Package2 , ShoppingCart ,HandCoins , ShoppingBasket , DollarSign, NotepadText, CreditCard, BookText, Mail, X, Users , Tags, Truck, ShoppingBag, ArrowLeftRight, User , Book, CircuitBoard, Ham , Armchair, Mouse , Apple, Sofa} from 'lucide-react'
+import type { ProductType, SupplierType , OrderType, TypeCarouselItem,Category  } from './types';
 
 // for the side bar
 export const user = {name:"ayoub" , role:"admin"};
 export const navItems = [
-  { name: "Dashboard", path: "/dashboard", icon: LayoutDashboard, children: [] },
+  { name: "Dashboard", path: "/", icon: LayoutDashboard, children: [] },
   {
     name: "Products",
     path: "/products",
@@ -271,3 +271,121 @@ export const carouselData: TypeCarouselItem[] = [
     path: "/stock_movement"
   }
 ];
+
+// for the dashboard: current live orders
+export const ordersData : OrderType[] = [
+  {
+    id: "ORD-2024-001",
+    totalCost: "$1,245.50",
+    invoiceId: "INV-2024-001",
+    createdAt: "2024-01-15T10:30:00Z",
+    receivedAt: "2024-01-20T14:45:00Z",
+    status: "Delivered",
+    progress: 100,
+    Img : User
+  },
+  {
+    id: "ORD-2024-002",
+    totalCost: "$890.25",
+    invoiceId: "INV-2024-002",
+    createdAt: "2024-01-18T09:15:00Z",
+    receivedAt: "2024-01-22T11:20:00Z",
+    status: "In Transit",
+    progress: 65,
+    Img : User
+  },
+  {
+    id: "ORD-2024-003",
+    totalCost: "$2,350.00",
+    invoiceId: "INV-2024-003",
+    createdAt: "2024-01-20T13:00:00Z",
+    receivedAt: "2024-01-25T16:30:00Z",
+    status: "Processing",
+    progress: 30,
+    Img : User
+  },
+]
+
+export const productsData: ProductType[] = [
+  {
+    brand: "TechPro",
+    category: "Electronics",
+    title: "Wireless Mouse",
+    description: "Ergonomic wireless mouse with USB receiver",
+    stock: 150,
+    unit: 1,
+    cost: 12.50,
+    sell: 24.99,
+    isPerishable: false,
+    isActive: true,
+    Img: Mouse
+  },
+  {
+    brand: "FreshFarm",
+    category: "Food",
+    title: "Organic Apples",
+    description: "Fresh organic apples from local farms",
+    stock: 200,
+    unit: 5,
+    cost: 2.00,
+    sell: 4.99,
+    isPerishable: true,
+    isActive: true,
+    Img: Apple
+  },
+  {
+    brand: "HomeComfort",
+    category: "Furniture",
+    title: "Office Chair",
+    description: "Adjustable ergonomic office chair with lumbar support",
+    stock: 45,
+    unit: 1,
+    cost: 89.00,
+    sell: 179.99,
+    isPerishable: false,
+    isActive: true,
+    Img: Armchair
+  }
+]
+
+export const suppliersData: SupplierType[] = [
+  {
+    name: "TechSupply Inc.",
+    email: "contact@techsupply.com",
+    phoneNumber: "+1-555-0101",
+    orders: [ordersData[0]], // Reference to first order
+    products: [productsData[0]], // Reference to first product
+    Img: Users
+  },
+  {
+    name: "Fresh Foods Distributor",
+    email: "orders@freshfoods.com",
+    phoneNumber: "+1-555-0202",
+    orders: [ordersData[1]], // Reference to second order
+    products: [productsData[1]], // Reference to second product
+    Img: Users
+  },
+  {
+    name: "Furniture Wholesale Co.",
+    email: "sales@furniturewholesale.com",
+    phoneNumber: "+1-555-0303",
+    orders: [ordersData[2]], // Reference to third order
+    products: [productsData[2]], // Reference to third product
+    Img: Users
+  }
+]
+
+export const categoriesData: Category[] = [
+  {
+    name: "Electronics",
+    Img: CircuitBoard
+  },
+  {
+    name: "Food",
+    Img: Ham
+  },
+  {
+    name: "Furniture",
+    Img: Sofa
+  },
+]

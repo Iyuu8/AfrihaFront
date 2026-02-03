@@ -44,7 +44,7 @@ export default function RootLayout({
         <Sidebar className="hidden lg:flex" user={user} />
         <div className="flex flex-col bg-[#E3EDF9] flex-1 overflow-hidden">
           <Header />
-          <main className="flex flex-col px-[clamp(15px,5%,80px)]">
+          <main className="flex flex-col px-[clamp(15px,5%,80px)] overflow-y-auto custom-scrollbar">
             {children}
 
           </main>

@@ -27,6 +27,8 @@ export interface ProductType { // i for the time being i supposed that this is t
     sell: number,
     isPerishable: boolean,
     isActive: boolean,
+    Img?:LucideIcon // should be a string
+
 }
 
 // order type, again i supposed that this is the type
@@ -37,6 +39,12 @@ export interface OrderType {
     createdAt:string,
     receivedAt:string,
     status:string
+
+    // for the dashboard
+
+    progress? : number 
+    Img?: LucideIcon // should be a string
+
 }
 
 // type of supplier, again i supposed that this is the type
@@ -46,6 +54,14 @@ export interface SupplierType{
     phoneNumber:string
     orders: OrderType[],
     products : ProductType[]
+    Img?:LucideIcon // should be a string
+
+
+}
+
+export interface Category {
+    name:string,
+    Img?:LucideIcon // should be a string
 }
 
 // the type of carousel items
@@ -54,4 +70,18 @@ export interface TypeCarouselItem {
   nb: number;
   Icon: LucideIcon;
   path: string;
+  
 };
+
+// for the dashboard
+
+export interface ItemStandard {
+    Img?: LucideIcon, // should be a string
+    name?:string,
+    id? : string, 
+    title? :string,
+    createdAt?:string,
+    brand?: string,
+    phoneNumber?:string,
+    progress? : number,
+}
