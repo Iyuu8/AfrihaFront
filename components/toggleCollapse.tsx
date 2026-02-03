@@ -2,8 +2,8 @@
 import { useState } from 'react';
 import { Menu, X } from 'lucide-react';
 
-export default function ToggleCollapse() {
-  const [collapsed, setCollapsed] = useState(false);
+export default function ToggleCollapse({collapsedProp} : {collapsedProp : [collapsed:boolean , setCollapsed : (collapsed:boolean)=>void]}) {
+  const [collapsed, setCollapsed] = collapsedProp;
 
   return (
     <button

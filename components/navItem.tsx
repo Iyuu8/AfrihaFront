@@ -34,6 +34,7 @@ export default function NavItem({navProp, collapsed, onLinkClick} : {navProp : T
     };
 
     const isAnyChildActive = navProp.children.some(child => child.path === path);
+    const isParentActive = navProp.path === path;
     
     if (collapsed) {
         return (
@@ -41,7 +42,7 @@ export default function NavItem({navProp, collapsed, onLinkClick} : {navProp : T
                 <Link 
                     href={navProp.path} 
                     className={`w-12 h-12 rounded-xl flex items-center justify-center transition-all duration-300 ${
-                        isAnyChildActive 
+                        isAnyChildActive || isParentActive
                             ? 'text-black bg-[#61FFF2]' 
                             : 'text-white hover:bg-[#3FBCC8]'
                     }`}
@@ -57,21 +58,31 @@ export default function NavItem({navProp, collapsed, onLinkClick} : {navProp : T
         <li 
             className='text-white text-lg sm:text-xl flex flex-col gap-0 w-full' 
         >
-            <button 
-                className={`px-[10%] flex gap-2 w-full cursor-pointer py-[3px] transition-all duration-300 items-center ${
-                    isAnyChildActive 
+            <div
+                className={`px-[10%] flex gap-2 w-full py-[3px] transition-all duration-300 items-center ${
+                    isAnyChildActive || isParentActive
                         ? 'bg-[#3FBCC8]' 
                         : 'hover:bg-[#3FBCC8]'
                 }`} 
-                onClick={handleToggle}
             >
-                <navProp.icon size={20} />
-                <p>{navProp.name}</p>
-                <ChevronDown 
-                    size={20} 
-                    className={`ml-auto transition-transform duration-300 ${open ? 'rotate-180' : ''}`}
-                />
-            </button>
+                <Link 
+                    href={navProp.path} 
+                    className='flex items-center gap-2 flex-1'
+                    onClick={onLinkClick}
+                >
+                    <navProp.icon size={20} />
+                    <p>{navProp.name}</p>
+                </Link>
+                <button
+                    onClick={handleToggle}
+                    className='cursor-pointer p-1'
+                >
+                    <ChevronDown 
+                        size={20} 
+                        className={`transition-transform duration-300 ${open ? 'rotate-180' : ''}`}
+                    />
+                </button>
+            </div>
 
             <ul 
                 className={`overflow-hidden transition-all duration-500 ease-in-out w-full flex flex-col ${

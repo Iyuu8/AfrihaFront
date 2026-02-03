@@ -8,37 +8,20 @@ import { usePathname } from 'next/navigation'
 import NavItem from "./navItem"
 import { Power } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { useRef, useEffect , useState } from 'react'
+import { useState } from 'react'
 
 import { navItems } from '@/variables_functions'
 
 
 
 
-export default function Sidebar({user} : {user : userType}) {
+export default function Sidebar({user, isOpen, onToggle, className} : {user : userType, isOpen?: boolean, onToggle?: () => void , className?:string}) {
   const {name , role} = user;
   const path = usePathname();
-  const sideBarRef = useRef<HTMLDivElement>(null);
-  const [sideBarW , setSideBarW] = useState(0);
   const [collapsed, setCollapsed] = useState(false);
-  const [mobileOpen, setMobileOpen] = useState(false);
-  
-  useEffect(()=>{
-    const updateW = ()=>{
-      if(!sideBarRef.current) return;
-      setSideBarW(sideBarRef.current?.offsetWidth);
-    }
-    updateW();
-    window.addEventListener('resize', updateW);
-    return () => window.removeEventListener('resize', updateW);
-  },[collapsed])
 
   const handleToggle = () => {
     setCollapsed(!collapsed);
-  };
-
-  const handleMobileClose = () => {
-    setMobileOpen(false);
   };
 
   const contentVariants = {
@@ -59,34 +42,32 @@ export default function Sidebar({user} : {user : userType}) {
     }
   };
 
+  // For mobile: use isOpen prop, for desktop: always show (controlled by className)
+  const isMobileOpen = isOpen ?? true;
+
   return (
     <>
-      {/* Mobile overlay */}
-        <AnimatePresence>
-          {!collapsed && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.2 }}
-            className="fixed inset-0 bg-[rgba(0,0,0,0.6)] z-40 lg:hidden"
-            onClick={handleMobileClose}
-          />
-          )}
-        </AnimatePresence>
-        <aside 
-          className={`sticky left-0 top-0 h-screen bg-[#32A4AF] pt-[10px] overflow-y-auto flex flex-col z-50 transition-all duration-300 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] ${
-            collapsed ? 'w-[80px]' : 'w-[300px]'
-          }`}
-          ref = {sideBarRef}
-        >
-        {/* Mobile close button */}
-        {!collapsed && (
+      {/* Mobile overlay - only show if onToggle exists (meaning it's mobile) */}
+      {onToggle && isMobileOpen && (
+        <div
+          className="fixed inset-0 bg-black/60 z-40 lg:hidden"
+          onClick={onToggle}
+        />
+      )}
+
+      <aside 
+        className={`${className || ''} left-0 top-0 h-screen bg-[#32A4AF] pt-[10px] overflow-y-auto flex flex-col z-50 transition-all duration-300 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]
+          ${onToggle ? (isMobileOpen ? 'translate-x-0' : '-translate-x-full') : 'translate-x-0'}
+          ${collapsed ? 'w-[80px]' : 'w-[300px]'}
+        `}
+      >
+        {/* Mobile close button - only show if onToggle exists */}
+        {onToggle && (
           <button
-            onClick={handleMobileClose}
-            className="lg:hidden absolute top-4 right-4 text-white hover:bg-[#3FBCC8] p-2 rounded-lg transition-colors"
+            onClick={onToggle}
+            className="lg:hidden absolute top-4 right-4 text-white hover:bg-[#3FBCC8] p-2 rounded-lg transition-colors z-10"
           >
-          <X size={24} />
+            <X size={24} />
           </button>
         )}
         
@@ -110,7 +91,7 @@ export default function Sidebar({user} : {user : userType}) {
               </Link>
 
               {/*user profile on expand*/}
-              <Link href="/profile" className='transition-all duration-300  flex items-center px-[20px] gap-4 text-white hover:bg-[#3FBCC8] py-[15px]'>
+              <Link href="/profile" className='transition-all duration-300 flex items-center px-[20px] gap-4 text-white hover:bg-[#3FBCC8] py-[15px]'>
                 <img 
                   src="/profile.jpg" 
                   alt="profile picture" 
@@ -150,24 +131,23 @@ export default function Sidebar({user} : {user : userType}) {
                 <li 
                   key={`${item.name}-${ind}`} 
                   className={`${collapsed ? 'w-12' : 'w-full flex justify-center'}`}
-
                 >
                   <Link 
-                      href={item.path} 
-                      className={`rounded-xl py-[5px] flex items-center font-normal transition-all duration-300 text-lg sm:text-xl ${
+                    href={item.path} 
+                    className={`rounded-xl py-[5px] flex items-center font-normal transition-all duration-300 text-lg sm:text-xl ${
                       collapsed 
                         ? 'w-12 h-12 justify-center' 
                         : 'w-full px-[3%] mx-[8%] justify-start gap-2'
-                      } ${
+                    } ${
                       isActive
                         ? 'text-black bg-[#61FFF2]' 
                         : 'text-white hover:bg-[#3FBCC8]'
-                      }`}
-                      title={collapsed ? item.name : ''}
-                      onClick={handleMobileClose}
+                    }`}
+                    title={collapsed ? item.name : ''}
+                    onClick={onToggle}
                   >
-                  <item.icon size={collapsed ? 24 : 20} />
-                  {!collapsed && item.name}
+                    <item.icon size={collapsed ? 24 : 20} />
+                    {!collapsed && item.name}
                   </Link>
                 </li>
               ):(
@@ -175,7 +155,8 @@ export default function Sidebar({user} : {user : userType}) {
                   key={`${item.name}-${ind}`} 
                   navProp={item} 
                   collapsed={collapsed}
-                  onLinkClick={handleMobileClose}
+                  onLinkClick={onToggle}
+                  isActive={isActive}
                 />
               )
             })}
@@ -186,42 +167,40 @@ export default function Sidebar({user} : {user : userType}) {
         <div className='w-full flex flex-col items-center justify-center gap-3 mt-auto mb-[20px] px-[7.5%]'>
           {/* Logout Button */}
           {collapsed ? (
-            <motion.button 
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
+            <button 
               className='w-12 h-12 cursor-pointer bg-[#FF0000] flex items-center justify-center text-white font-bold rounded-xl hover:bg-[#CC0000] transition-all duration-300'
               title='Log Out'
             >
               <Power strokeWidth={3} size={24}/> 
-            </motion.button>
+            </button>
           ) : (
-            <motion.button 
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
+            <button 
               className='w-full bg-[#FF0000] flex items-center justify-center px-[15px] py-[10px] text-white font-bold rounded-xl gap-2 text-lg sm:text-xl hover:bg-[#CC0000] transition-all duration-300 cursor-pointer'
             >
               <Power strokeWidth={3} className='flex items-center'/> 
               <h2 className='flex items-end'>Log Out</h2>
-            </motion.button>
+            </button>
           )}
 
-          {/* Toggle Button */}
-          <button
-            onClick={handleToggle}
-            className={`flex cursor-pointer items-center justify-center bg-[#1E88A8] text-white font-bold rounded-xl hover:bg-[#176B85] transition-all duration-300 ${
-              collapsed ? 'w-12 h-12' : 'w-full px-[15px] py-[10px] gap-2'
-            }`}
-            title={collapsed ? 'Expand' : 'Collapse'}
-          >
-            {collapsed ? (
-              <ChevronRight strokeWidth={3} size={24} />
-            ) : (
-              <>
-                <ChevronLeft strokeWidth={3} size={20} />
-                <span className='text-lg sm:text-xl'>Collapse</span>
-              </>
-            )}
-          </button>
+          {/* Toggle Button - Hidden on mobile */}
+          {!onToggle && (
+            <button
+              onClick={handleToggle}
+              className={`flex cursor-pointer items-center justify-center bg-[#1E88A8] text-white font-bold rounded-xl hover:bg-[#176B85] transition-all duration-300 ${
+                collapsed ? 'w-12 h-12' : 'w-full px-[15px] py-[10px] gap-2'
+              }`}
+              title={collapsed ? 'Expand' : 'Collapse'}
+            >
+              {collapsed ? (
+                <ChevronRight strokeWidth={3} size={24} />
+              ) : (
+                <>
+                  <ChevronLeft strokeWidth={3} size={20} />
+                  <span className='text-lg sm:text-xl'>Collapse</span>
+                </>
+              )}
+            </button>
+          )}
         </div>
       </aside>
     </>

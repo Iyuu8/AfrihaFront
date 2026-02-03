@@ -1,6 +1,10 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import "swiper/css";
+import "swiper/css/pagination";
+import "swiper/css/navigation";
+
 import { Poppins } from 'next/font/google'
 import Sidebar from "@/components/sidebar";
 import {user} from "../variables_functions"
@@ -37,12 +41,11 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased flex`}
       >
-        <Sidebar collapsed={false} user = {user}/>
+        <Sidebar className="hidden lg:flex" user={user} />
         <div className="flex flex-col w-full bg-[#E3EDF9]">
           <Header />
-
+          {children}
         </div>
-        {children}
       </body>
     </html>
   );
